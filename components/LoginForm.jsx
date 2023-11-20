@@ -3,16 +3,34 @@ import Image from "next/image";
 import { login } from "@/redux/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { CheckIcon } from "@heroicons/react/24/solid";
-
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.user);
 
-  const handleLogin = (e) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    login(dispatch, { phoneNumber });
+    let status = await login(dispatch, { phoneNumber });
+    console.log(status);
+    status === 200 &&
+      Toast.fire({
+        icon: "success",
+        title: "Signed in successfully",
+      });
   };
 
   let disable;
@@ -43,7 +61,7 @@ const Login = () => {
               Welcome
             </h1>
             <p className="text-sm font-thin tracking-wide">
-              Not required to Sign-up, just Sign-in &#x2714;
+              No Sign-up, just Sign-in &#x2714;
               <br />
               Please enter your phone number.
             </p>
@@ -79,7 +97,9 @@ const Login = () => {
               </div>
 
               {phoneNumber.length > 0 && disable ? (
-                <p className="text-xs text-blue-700">{11- phoneNumber.length } digits required.</p>
+                <p className="text-xs text-blue-700">
+                  {11 - phoneNumber.length} digits required.
+                </p>
               ) : (
                 <></>
               )}

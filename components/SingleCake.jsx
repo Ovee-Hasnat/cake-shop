@@ -6,9 +6,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
-
-
-
+import Swal from "sweetalert2";
 
 const SingleCake = () => {
   const [size, setSize] = useState(2);
@@ -41,23 +39,36 @@ const SingleCake = () => {
   }, [productId]);
 
   const [cartId, setCartId] = useState("");
-  
+
   const [price, setPrice] = useState(product.price);
-  
+
   useEffect(() => {
     setPrice(product.price * size);
     setCartId(product._id + size);
   }, [size, product]);
-  
+
   const dispatch = useDispatch();
+  const Router = useRouter();
   const handleAddToCart = () => {
-    dispatch(addProduct({...product, size, price, note, cartId }));
+    dispatch(addProduct({ ...product, size, price, note, cartId }));
+    Swal.fire({
+      title: "Added",
+      text: "This product is added to the cart.",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#4a044e",
+      cancelButtonColor: "#bebcbd",
+      confirmButtonText: "Go to cart",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Router.push("/cart");
+      }
+    });
   };
-  
 
   return (
     <div>
-      <div className="p-6">
+      <div className="p-6 select-none">
         <div className="lg:flex items-center gap-5">
           <Image
             src={
@@ -109,7 +120,6 @@ const SingleCake = () => {
                 placeholder="ex. Happy Birthday"
                 onKeyUp={(e) => setNote(e.target.value)}
               />
-              
             </div>
             <div
               className="w-fit relative group overflow-hidden border border-fuchsia-950 rounded-lg cursor-pointer shadow-lg"

@@ -8,7 +8,7 @@ const Delivery = () => {
   return (
     <div className="my-20 xl:px-32 relative">
 
-      <div className="absolute h-fit top-0 bottom-0 -left-28 m-auto xl:-left-20 -rotate-90 origin-center z-10">
+      <div className="absolute hidden lg:block h-fit top-0 bottom-0 -left-28 m-auto xl:-left-20 -rotate-90 origin-center z-10">
         <h1 className="font-['Prata'] text-8xl tracking-tighter text-transparent bg-clip-text bg-gradient-to-t from-fuchsia-200 to-fuchsia-900 opacity-50 leading-normal">
           Delivery
         </h1>

@@ -27,7 +27,7 @@ const SingleCategory = () => {
     );
   } else {
     return (
-      <div className="relative h-screen">
+      <div className="relative lg:h-screen">
         <div className="p-6 space-y-10 max-w-7xl mx-auto">
           <h1 className="text-2xl md:text-3xl xl:text-5xl font-['Prata'] tracking-tighter capitalize">
             {title}
@@ -35,7 +35,7 @@ const SingleCategory = () => {
 
           <SingleCakeCategory title={title} />
 
-          <div>
+          <div className="pb-20">
             <Link href={"/cakes"} className="w-fit">
               <p className="py-2 px-6 w-fit border border-fuchsia-950 rounded-lg shadow-lg mx-auto font-thin">
                 All Categories

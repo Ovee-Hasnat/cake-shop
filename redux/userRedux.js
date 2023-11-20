@@ -1,5 +1,4 @@
 import Cookies from "js-cookie";
-import { NextResponse } from "next/server";
 
 const { createSlice } = require("@reduxjs/toolkit");
 
@@ -9,6 +8,9 @@ const userSlice = createSlice({
     currentUser: null,
     isFetching: false,
     error: false,
+
+    admin: false,
+    adminError: false,
   },
 
   reducers: {
@@ -31,12 +33,32 @@ const userSlice = createSlice({
       state.currentUser = null;
       state.isFetching = false;
       state.error = false;
+      state.admin = false;
 
       Cookies.remove("token");
+    },
+
+    adminLogin: (state, action) => {
+      if (action.payload === "dhaka1219") {
+        state.adminError = false;
+        state.admin = true;
+      } else {
+        state.adminError = true;
+      }
+    },
+
+    adminLogout: (state) => {
+      state.admin = false;
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } =
-  userSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  adminLogin,
+  adminLogout,
+} = userSlice.actions;
 export default userSlice.reducer;

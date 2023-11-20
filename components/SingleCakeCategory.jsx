@@ -29,7 +29,7 @@ const SingleCakeCategory = ({ title }) => {
                 className="w-fit"
                 key={product._id}
               >
-                <div className="p-2 shadow-lg rounded-lg flex md:flex-col items-center gap-4 w-fit mx-auto group bg-white">
+                <div className="p-2 shadow-lg rounded-lg flex md:flex-col items-center gap-4 w-fit mx-auto group bg-fuchsia-200">
                   <div className="relative w-36 h-44 md:w-40 md:h-52 lg:w-52 lg:h-60 rounded-lg overflow-hidden shadow-md">
                     <Image
                       src={

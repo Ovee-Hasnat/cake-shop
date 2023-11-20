@@ -14,7 +14,7 @@ const CakeTypeBox = () => {
       } catch (error) {}
     };
     getCategory();
-  });
+  }, []);
   return (
     <div className="xl:mt-10 md:py-10 bg-gradient-to-b to-fuchsia-200 from-white p-6">
       <div className="max-w-5xl w-fit mx-auto p-1 grid grid-cols-2 grid-rows-2 gap-2 rounded-xl shadow-lg">

@@ -1,12 +1,15 @@
 import { clearCart, removeProduct } from "@/redux/cartRedux";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const Cart = () => {
   let total = 0;
   const cart = useSelector((state) => state.cart);
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const dispatch = useDispatch();
   const handleRemoveProduct = (product) => {
@@ -16,6 +19,33 @@ const Cart = () => {
 
   const handleClearAll = () => {
     dispatch(clearCart());
+    Swal.fire({
+      title: "Removed!",
+      text: "All items from your cart is removed.",
+      icon: "success",
+      confirmButtonText: "Cool",
+    });
+  };
+
+  const Router = useRouter();
+  const handleProceed = () => {
+    if (currentUser) {
+      Router.push("/invoice");
+    } else {
+      Swal.fire({
+        title: "Login First",
+        text: "You have to login to proceed further.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#4a044e",
+        cancelButtonColor: "#bebcbd",
+        confirmButtonText: "Login",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Router.push("/login");
+        }
+      });
+    }
   };
 
   return (
@@ -94,14 +124,12 @@ const Cart = () => {
         </div>
 
         <div className="my-8 w-fit ml-auto">
-          <Link
-            href={"/invoice"}
-            className="block bg-fuchsia-950 rounded-lg shadow-lg"
+          <button
+            className="py-2 px-6 text-white tracking-wide lg:text-xl bg-fuchsia-950 rounded-lg shadow-lg"
+            onClick={handleProceed}
           >
-            <p className="py-2 px-6 text-white tracking-wide lg:text-xl">
-              Proceed to Payment
-            </p>
-          </Link>
+            Proceed to Payment
+          </button>
 
           <Link href={"/"} className="block w-fit mx-2 my-6">
             <p className="text-sm lg:text-base tracking-widest underline opacity-60">

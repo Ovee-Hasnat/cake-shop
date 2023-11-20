@@ -61,11 +61,18 @@ const Navbar = () => {
                   Contact
                 </p>
               </Link>
-              <Link href="/" className="block w-fit mx-auto">
+              <Link href="/orders" className="block w-fit mx-auto">
                 <p className="hover:underline decoration-1 transition-all ease-linear duration-200">
                   Orders
                 </p>
               </Link>
+              {loggedInUser?.isAdmin && (
+                <Link href="/panel" className="block w-fit mx-auto">
+                  <p className="hover:underline decoration-1 transition-all ease-linear duration-200">
+                    Admin
+                  </p>
+                </Link>
+              )}
             </ul>
           </div>
           <div className="space-x-3 hidden lg:flex items-center lg:flex-1 justify-end">
@@ -101,7 +108,7 @@ const Navbar = () => {
       </div>
       <div
         id="sideMenu"
-        className="top-0 w-0 h-screen bg-fuchsia-100/20 backdrop-blur-md right-0 transition-all duration-200 ease-linear z-[999] py-9 fixed"
+        className="top-0 w-0 h-screen bg-white right-0 transition-all duration-200 ease-linear z-[999] py-6 fixed"
       >
         <XMarkIcon
           className="w-10 text-fuchsia-900 cursor-pointer mx-auto"
@@ -121,9 +128,14 @@ const Navbar = () => {
             <Link href="/" className="block w-fit mx-auto">
               <p onClick={closeNav}>Contact</p>
             </Link>
-            <Link href="/" className="block w-fit mx-auto">
+            <Link href="/orders" className="block w-fit mx-auto">
               <p onClick={closeNav}>Orders</p>
             </Link>
+            {loggedInUser?.isAdmin && (
+              <Link href="/panel" className="block w-fit mx-auto">
+                <p onClick={closeNav}>Admin</p>
+              </Link>
+            )}
             <Link
               href={"/cart"}
               className="flex items-center w-fit mx-auto"

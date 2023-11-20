@@ -1,12 +1,45 @@
+import { placeOrder } from "@/redux/apiCalls";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Swal from "sweetalert2";
 
 const Invoice = () => {
   let total = 0;
   const [delivery, setDelivery] = useState("");
+  const [payment, setPayment] = useState("");
   const [address, setAddress] = useState("");
+
+  const currentUser = useSelector((state) => state.user.currentUser);
   const cart = useSelector((state) => state.cart);
+
+  const dispatch = useDispatch();
+
+  const Router = useRouter();
+  const handlePlaceOrder = () => {
+    placeOrder(dispatch, {
+      userId: currentUser?._id,
+      products: cart.products,
+      total,
+      phoneNumber: currentUser?.phoneNumber,
+      address,
+      delivery,
+      payment,
+    });
+    Swal.fire({
+      title: "Order Placed",
+      text: "Thank you for confirming your order.",
+      icon: "success",
+      showCancelButton: false,
+      confirmButtonColor: "#4a044e",
+      confirmButtonText: "Alright",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Router.push("/orders");
+      }
+    });
+  };
 
   return (
     <div>
@@ -52,7 +85,10 @@ const Invoice = () => {
               <div className="space-y-12 md:my-0 my-10 flex-1 md:text-center md:border rounded-lg md:py-10 md:shadow-xl">
                 <div className="text-sm">
                   <p className="uppercase tracking-[2px] opacity-60 mb-2">
-                    choose delivery
+                    choose delivery{" "}
+                    <span className="text-xs tracking-tight text-red-700">
+                      **required
+                    </span>
                   </p>
 
                   <input
@@ -91,7 +127,10 @@ const Invoice = () => {
                 </div>
                 <div className="text-sm">
                   <p className="uppercase tracking-[2px] opacity-60">
-                    Enter Your address
+                    Enter Your address{" "}
+                    <span className="text-xs tracking-tight text-red-700">
+                      **required
+                    </span>
                   </p>
                   <input
                     className="border-b-2 drop-shadow-md leading-6 w-full max-w-md rounded-md my-2 p-2 "
@@ -101,24 +140,54 @@ const Invoice = () => {
                 </div>
                 <div className="text-sm">
                   <p className="uppercase tracking-[2px] opacity-60">
-                    choose payment method
+                    choose payment method{" "}
+                    <span className="text-xs tracking-tight text-red-700">
+                      **required
+                    </span>
                   </p>
-                  <div className="flex flex-col text-center space-y-2 my-2 max-w-sm mx-auto">
-                    <p className="py-2 border rounded-lg">
+
+                  <div className="flex flex-col text-center space-y-3 my-2 max-w-sm mx-auto">
+                    <button
+                      type="button"
+                      className="border rounded-lg px-6 py-2 transition duration-200 ease-in-out focus:bg-fuchsia-200  active:bg-fuchsia-300 shadow-md"
+                      onClick={() => {
+                        setPayment("COD");
+                      }}
+                    >
                       Cash On Delivery (COD)
-                    </p>
-                    <p className="py-2 border rounded-lg">BKash</p>
-                    <p className="py-2 border rounded-lg">Nagad</p>
+                    </button>
+                    <button
+                      type="button"
+                      className="border rounded-lg px-6 py-2 transition duration-200 ease-in-out focus:bg-fuchsia-200  active:bg-fuchsia-300 shadow-md"
+                      onClick={() => {
+                        setPayment("Bkash");
+                      }}
+                    >
+                      BKash
+                    </button>
+                    <button
+                      type="button"
+                      className="border rounded-lg px-6 py-2 transition duration-200 ease-in-out focus:bg-fuchsia-200  active:bg-fuchsia-300 shadow-md"
+                      onClick={() => {
+                        setPayment("Nagad");
+                      }}
+                    >
+                      Nagad
+                    </button>
                   </div>
                 </div>
 
                 <div>
                   <div className="w-fit mx-auto block relative group overflow-hidden border border-fuchsia-950 rounded-lg">
-                    <p className="py-2 px-20 group-hover:text-white cursor-pointer font-['raleway'] hover:font-semibold tracking-wider">
+                    <p
+                      className="py-2 px-20 group-hover:text-white cursor-pointer font-['raleway'] hover:font-semibold tracking-wider"
+                      onClick={handlePlaceOrder}
+                    >
                       Place Order
                     </p>
                     <span className="w-0 h-full bg-fuchsia-950 absolute top-0 left-0 group-hover:w-full transition-all ease-in-out duration-500 -z-10" />
                   </div>
+
                   <Link href={"/cart"} className="block w-fit mx-auto">
                     <p className="uppercase text-sm font-thin tracking-wide text-center my-6 underline opacity-60">
                       Return to cart
