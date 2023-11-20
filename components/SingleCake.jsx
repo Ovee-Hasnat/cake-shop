@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+import { publicRequest } from "@/requestMethods";
 
 const SingleCake = () => {
   const [size, setSize] = useState(2);
@@ -28,10 +29,7 @@ const SingleCake = () => {
     const getProduct = async () => {
       try {
         const res =
-          productId &&
-          (await axios.get(
-            `http://localhost:5000/api/products/find/${productId}`
-          ));
+          productId && (await publicRequest(`/products/find/${productId}`));
         setProduct(res.data.product);
       } catch (error) {}
     };

@@ -14,22 +14,25 @@ const UserOrders = () => {
     const getOrders = async () => {
       try {
         const res = userId && (await userRequest.get(`orders/find/${userId}`));
-        setOrders(res.data.orders);
+        setOrders(res.data.orders.reverse());
       } catch (error) {}
     };
     getOrders();
   }, [userId]);
 
-
-  if(!currentUser){
-    return(
-        <div className="text-center space-y-10">
-            <h3 className="text-red-800 font-semibold tracking-wide">Please log in to see your order history.</h3>
-            <Link href={"/login"} className="block w-fit mx-auto">
-            <p className="text-lg uppercase tracking-widest cursor-pointer underline w-fit hover:tracking-[5px] transition-all duration-300 ease-in-out">Login</p>
-            </Link>
-        </div>
-    )
+  if (!currentUser) {
+    return (
+      <div className="text-center space-y-10">
+        <h3 className="text-red-800 font-semibold tracking-wide">
+          Please log in to see your order history.
+        </h3>
+        <Link href={"/login"} className="block w-fit mx-auto">
+          <p className="text-lg uppercase tracking-widest cursor-pointer underline w-fit hover:tracking-[5px] transition-all duration-300 ease-in-out">
+            Login
+          </p>
+        </Link>
+      </div>
+    );
   }
 
   return (
